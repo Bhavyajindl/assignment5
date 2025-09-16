@@ -1,0 +1,107 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head = NULL;
+
+// Insert at beginning
+void insertBeg(int val) {
+    Node* n = new Node{val, head};
+    head = n;
+}
+
+// Insert at end
+void insertEnd(int val) {
+    Node* n = new Node{val, NULL};
+    if (!head) { head = n; return; }
+    Node* t = head;
+    while (t->next) t = t->next;
+    t->next = n;
+}
+
+// Insert before/after a given value
+void insertSpec(int val, int key, bool after=true) {
+    Node* n = new Node{val, NULL};
+    if (!head) { cout<<"List empty\n"; return; }
+
+    // if key is head
+    if (!after && head->data==key) {
+        n->next=head; head=n; return;
+    }
+    Node* t=head;
+    while (t && t->data!=key) t=t->next;
+    if (!t) { cout<<"Key not found\n"; return; }
+    if (after) {
+        n->next=t->next; t->next=n;
+    } else {
+        // find previous
+        Node* prev=head;
+        while (prev->next!=t) prev=prev->next;
+        prev->next=n; n->next=t;
+    }
+}
+
+// Delete from beginning
+void delBeg() {
+    if (!head) { cout<<"Empty\n"; return; }
+    Node* t=head; head=head->next; delete t;
+}
+
+// Delete from end
+void delEnd() {
+    if (!head) { cout<<"Empty\n"; return; }
+    if (!head->next) { delete head; head=NULL; return; }
+    Node* t=head;
+    while (t->next->next) t=t->next;
+    delete t->next; t->next=NULL;
+}
+
+// Delete specific node
+void delSpec(int key) {
+    if (!head) { cout<<"Empty\n"; return; }
+    if (head->data==key) { Node* t=head; head=head->next; delete t; return; }
+    Node* t=head;
+    while (t->next && t->next->data!=key) t=t->next;
+    if (!t->next) { cout<<"Not found\n"; return; }
+    Node* del=t->next; t->next=del->next; delete del;
+}
+
+// Search
+void search(int key) {
+    Node* t=head; int pos=1;
+    while (t) {
+        if (t->data==key) { cout<<"Found at position "<<pos<<"\n"; return; }
+        pos++; t=t->next;
+    }
+    cout<<"Not found\n";
+}
+
+// Display
+void display() {
+    Node* t=head;
+    while (t) { cout<<t->data<<" "; t=t->next; }
+    cout<<"\n";
+}
+
+int main() {
+    int ch, val, key;
+    do {
+        cout<<"\nMenu:\n1.InsertBeg\n2.InsertEnd\n3.InsertBefore\n4.InsertAfter\n";
+        cout<<"5.DelBeg\n6.DelEnd\n7.DelSpec\n8.Search\n9.Display\n0.Exit\nChoice: ";
+        cin>>ch;
+        switch(ch) {
+            case 1: cout<<"Value: "; cin>>val; insertBeg(val); break;
+            case 2: cout<<"Value: "; cin>>val; insertEnd(val); break;
+            case 3: cout<<"Value & Key: "; cin>>val>>key; insertSpec(val,key,false); break;
+            case 4: cout<<"Value & Key: "; cin>>val>>key; insertSpec(val,key,true); break;
+            case 5: delBeg(); break;
+            case 6: delEnd(); break;
+            case 7: cout<<"Key: "; cin>>key; delSpec(key); break;
+            case 8: cout<<"Key: "; cin>>key; search(key); break;
+            case 9: display(); break;
+        }
+    } while(ch!=0);
+}
