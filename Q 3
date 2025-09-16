@@ -1,0 +1,56 @@
+// student id - 1024030295
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head = NULL;
+
+// insert at end
+void insertEnd(int val) {
+    Node* n = new Node{val, NULL};
+    if (!head) { head = n; return; }
+    Node* t = head;
+    while (t->next) t = t->next;
+    t->next = n;
+}
+
+// find middle
+int findMiddle() {
+    if (!head) return -1; // empty list
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while (fast && fast->next) {
+        slow = slow->next;          // move 1 step
+        fast = fast->next->next;    // move 2 steps
+    }
+    return slow->data;
+}
+
+// display list
+void display() {
+    Node* t = head;
+    while (t) {
+        cout << t->data;
+        if (t->next) cout << "->";
+        t = t->next;
+    }
+    cout << "\n";
+}
+
+int main() {
+    // Input: 1->2->3->4->5
+    int arr[] = {1,2,3,4,5};
+    for (int x : arr) insertEnd(x);
+
+    cout << "Linked List: ";
+    display();
+
+    cout << "Middle element: " << findMiddle() << "\n";
+
+    return 0;
+}
