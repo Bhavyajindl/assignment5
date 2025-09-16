@@ -1,0 +1,59 @@
+// student id - 1024030295
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head = NULL;
+
+// Insert at end
+void insertEnd(int val) {
+    Node* n = new Node{val, NULL};
+    if (!head) { head = n; return; }
+    Node* t = head;
+    while (t->next) t = t->next;
+    t->next = n;
+}
+
+// Reverse linked list
+void reverseList() {
+    Node* prev = NULL;
+    Node* curr = head;
+    Node* next = NULL;
+
+    while (curr) {
+        next = curr->next;   // save next
+        curr->next = prev;   // reverse link
+        prev = curr;         // move prev ahead
+        curr = next;         // move curr ahead
+    }
+    head = prev; // new head
+}
+
+// Display list
+void display() {
+    Node* t = head;
+    while (t) {
+        cout << t->data << "->";
+        t = t->next;
+    }
+    cout << "NULL\n";
+}
+
+int main() {
+    // Input: 1->2->3->4->NULL
+    int arr[] = {1,2,3,4};
+    for (int x : arr) insertEnd(x);
+
+    cout << "Original List: ";
+    display();
+
+    reverseList();
+
+    cout << "Reversed List: ";
+    display();
+
+    return 0;
+}
